@@ -7,6 +7,7 @@
 #include <exception>
 #include <ostream>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 namespace hda {
@@ -21,26 +22,26 @@ public:
 	virtual const char* what() const noexcept override;
 	const std::string& message() const;
 
-	template<typename T>
-	Exception& operator<< (const T& t)
-	{
-		append(boost::lexical_cast<std::string>(t));
-		return *this;
-	}
-
-private:
 	void append(const std::string& what);
+private:
 	DECLARE_COPYABLE_PIMPL(Exception)
 };
 
-std::ostream& operator<< (std::ostream& stream, const Exception& ex)
+template<typename Ex, typename T>
+typename std::enable_if<
+	std::is_base_of<Exception, Ex>::value,
+	Ex
+>::type operator<< (Ex ex, const T& t)
 {
-	stream << ex.message();
-	return stream;
+	ex.append(boost::lexical_cast<std::string>(t));
+	return ex;
 }
+
+std::ostream& operator<< (std::ostream& stream, const Exception& ex);
 
 class LogicError: public Exception
 {
+public:
 	using Exception::Exception;
 };
 

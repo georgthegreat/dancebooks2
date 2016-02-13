@@ -37,6 +37,12 @@ Exception::append(const std::string& what)
 	impl_->what += what;
 }
 
+std::ostream& operator<< (std::ostream& stream, const Exception& ex)
+{
+    stream << ex.message();
+    return stream;
+}
+
 DEFINE_COPYABLE_PIMPL(Exception);
 
 } //namespace common
