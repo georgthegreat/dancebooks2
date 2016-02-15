@@ -23,3 +23,19 @@ Define the following methods variables:
 * Each test module will be linked against newly compiled library and executed with proper `LD_LIBRARY_PATH` set
 * Tests can be executed explicilty by running `test` make target
 
+## Installing and uninstalling
+
+Though proper packaging is not currently supported by the `bild`, some (much more simple) tools are available to replace this functionality.
+
+* Define variable `FILES` containing a list of destination install paths. Here and below we would consider the following example:
+	```
+	FILES := \
+		/usr/lib/$(LIB).so \
+		/usr/include \
+	```
+* Upon invoking `make install`, `bild` will process this variable with the following effect:
+	1. First line will install `$(LIB).so` to `/usr/lib` folder
+	2. Second line will install files from local `include` folder (containing library interface headers) to global `/usr/include`, keeping the folder structure properly
+* Upon invoking `make uninstall`, `bild` will remove all files previously installed
+* **WARNINING** Since `bild` doesn't store any installation state anywhere (compared with e. g. `apt` suite), side-effects are possible if `make uninstall` happens with folder structure different from those of `make install` time. Try to avoid such things
+* Both `make install` and `make uninstall` will require root priveleges when installing to a global folder
