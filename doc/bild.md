@@ -8,14 +8,18 @@
 
 ## Builing a library from C++ source code
 
-Put your library interface files (headers) into `include/` subfolder. It will be added to include path of your compiler.
+Put your library interface files (headers) into `include/` subfolder. It will be added to include path during compilation.
 
 Define the following methods variables:
 
 * `LIB` — basename for the library to be built (both shared object and static library will be built)
 * `SOURCES` — list of C++ files to be compiled
-* `TESTS` — list of test modules to be executed. `bild` assumes that each test module will be compiled independently (i. e. it should define `main` function). Each test module will be linked against newly compiled library and executed with proper `LD_LIBRARY_PATH` set. Tests can be executed by running `test` make target.
+* **(optional)** `CXX` — compiler to be used for compilation (default: `g++`). Compiler should properly support `g++` options (i. e. it's OK to use some backported `g++` version or `clang`, but it's not OK to use Visual Studio CL)
 
-You can optionally define the following variables:
+## Testing your newly compiled library
 
-* `CXX` — compiler to be used for compilation (default: `g++`). Compiler should properly support `g++` options (i. e. it's OK to use some backported `g++` version or `clang`, but it's not OK to use Visual Studio CL)
+* `TESTS` — list of test modules to be executed. `bild` assumes that each test module will be compiled independently (i. e. it should define `main` function)
+* Each test module will be linked against `libboost-unit-test-framework`
+* Each test module will be linked against newly compiled library and executed with proper `LD_LIBRARY_PATH` set
+* Tests can be executed explicilty by running `test` make target
+
