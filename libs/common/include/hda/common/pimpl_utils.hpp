@@ -23,21 +23,12 @@ namespace pimpl {
 		classname& operator= (classname&&) noexcept; \
 
 #define DEFINE_PIMPL(classname) \
-	classname::~classname() = default;
+	classname::~classname() = default; \
 
 #define DEFINE_MOVABLE_PIMPL(classname) \
 	DEFINE_PIMPL(classname) \
-	classname::classname(classname&& toMove) noexcept : \
-		impl_(std::move(toMove.impl_)) \
-	{ \
-	} \
-	\
-	classname& \
-	classname::operator= (classname&& toMove) noexcept \
-	{ \
-		impl_ = std::move(toMove.impl_); \
-		return *this; \
-	} \
+	classname::classname(classname&&) noexcept = default; \
+	classname::operator= (classname&& toMove) noexcept = default; \
 
 #define DECLARE_COPYABLE_PIMPL(classname) \
 	DECLARE_PIMPL(classname) \
