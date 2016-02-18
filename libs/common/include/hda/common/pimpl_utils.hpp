@@ -28,7 +28,7 @@ namespace pimpl {
 #define DEFINE_MOVABLE_PIMPL(classname) \
 	DEFINE_PIMPL(classname) \
 	classname::classname(classname&&) noexcept = default; \
-	classname::operator= (classname&& toMove) noexcept = default; \
+	classname& classname::operator= (classname&&) noexcept = default; \
 
 #define DECLARE_COPYABLE_PIMPL(classname) \
 	DECLARE_PIMPL(classname) \
