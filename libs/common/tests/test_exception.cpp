@@ -60,6 +60,21 @@ BOOST_AUTO_TEST_CASE(test_assertion)
 	BOOST_CHECK(exceptionThrown);
 }
 
+BOOST_AUTO_TEST_CASE(test_custom_require)
+{
+	class CustomException: public Exception
+	{
+		using Exception::Exception;
+	};
+
+	auto thrower = []()
+	{
+		REQUIRE(false, CustomException(), "message" << 1);
+	};
+
+	BOOST_CHECK_THROW(thrower(), CustomException);
+}
+
 } //namespace tests
 } //namespace common
 } //namespace hda

@@ -41,32 +41,36 @@ std::ostream& operator<< (std::ostream& stream, const Exception& ex);
 
 class LogicError: public Exception
 {
-public:
 	using Exception::Exception;
 };
 
 class AssertionError: public Exception
 {
-public:
-	AssertionError(const std::string& what)
-		: Exception("Assertion failed: " + what)
-	{
-	}
+	using Exception::Exception;
 };
 
 #define __STR(X) #X
 
-#define REQUIRE(expression, message) \
-	if (not (expression)) \
+#define __REQUIRE_3(expression, exObj, message) \
 	{ \
-		throw LogicError() << message; \
+		bool val = static_cast<bool>(expression); \
+		if (not val) \
+		{ \
+			throw exObj << message; \
+		} \
 	}
 
+#define __REQUIRE_2(expression, message) \
+	__REQUIRE_3(expression, LogicError(), message)
+
+
+#define __GET_REQUIRE(_1,_2,_3,WHAT,...) WHAT
+
+#define REQUIRE(...) \
+	__GET_REQUIRE(__VA_ARGS__,__REQUIRE_3,__REQUIRE_2)(__VA_ARGS__) \
+
 #define ASSERT(expression) \
-	if (not (expression)) \
-	{ \
-		throw AssertionError(__STR(expression)); \
-	}
+	__REQUIRE_3(expression, AssertionError(), "Assertion failed: " << __STR(expression))
 
 } //namespace common
 } //namespace hda
