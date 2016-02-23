@@ -51,6 +51,9 @@ public:
     Probe(int value);
     int value() const;
 
+	//second value may only be set by PimplFactory
+	int secondValue() const;
+
 private:
     DECLARE_MOVABLE_PIMPL(Probe);
 };
@@ -58,10 +61,11 @@ private:
 struct Probe::Impl
 {
     int value;
+	int secondValue;
 };
 
 Probe::Probe(int value)
-    : impl_(new Impl{value})
+    : impl_(new Impl{value, 112263})
 {
 }
 
@@ -69,6 +73,12 @@ int Probe::value() const
 {
     ASSERT(impl_);
     return impl_->value;
+}
+
+int Probe::secondValue() const
+{
+	ASSERT(impl_);
+	return impl_->secondValue;
 }
 
 DEFINE_MOVABLE_PIMPL(Probe);
@@ -107,6 +117,13 @@ BOOST_AUTO_TEST_CASE(test_movable)
 	movable::Probe secondProbe(std::move(firstProbe));
 	BOOST_CHECK_EQUAL(secondProbe.value(), 31337);
 	BOOST_CHECK_THROW(firstProbe.value(), AssertionError);
+}
+
+BOOST_AUTO_TEST_CASE(test_pimpl_factory)
+{
+	auto factored = PimplFactory<movable::Probe>::create(100500, 555555);
+	BOOST_CHECK_EQUAL(factored.value(), 100500);
+	BOOST_CHECK_EQUAL(factored.secondValue(), 555555);
 }
 
 } //namespace tests

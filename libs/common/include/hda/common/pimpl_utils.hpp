@@ -5,7 +5,25 @@
 
 namespace hda {
 namespace common {
-namespace pimpl {
+
+//helper class useful for creating pimpled objects
+//by direct invokation of Impl constructors
+template<typename T>
+class PimplFactory
+{
+public:
+	using Impl = typename T::Impl;
+
+	template<typename... Args>
+	static T create(Args&& ... args)
+	{
+		return T(
+			std::unique_ptr<Impl>(
+				new Impl{std::forward<Args>(args)...}
+			)
+		);
+	}
+};
 
 #define DECLARE_PIMPL(classname) \
 	public: \
@@ -13,6 +31,9 @@ namespace pimpl {
 	private: \
 		class Impl; \
 		std::unique_ptr<Impl> impl_; \
+		\
+		friend class hda::common::PimplFactory<classname>; \
+		classname(std::unique_ptr<Impl> impl); \
 
 #define DECLARE_MOVABLE_PIMPL(classname) \
 	DECLARE_PIMPL(classname) \
@@ -24,6 +45,10 @@ namespace pimpl {
 
 #define DEFINE_PIMPL(classname) \
 	classname::~classname() = default; \
+	classname::classname(std::unique_ptr<Impl> impl) : \
+		impl_(std::move(impl)) \
+	{ \
+	} \
 
 #define DEFINE_MOVABLE_PIMPL(classname) \
 	DEFINE_PIMPL(classname) \
@@ -52,6 +77,5 @@ namespace pimpl {
 		return *this; \
 	} \
 
-} //namespace pimpl
 } //namespace common
 } //namespace hda
