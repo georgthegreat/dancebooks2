@@ -1,7 +1,15 @@
 # Some adequate defaults for user-site variables
 CXX ?= g++
-CXXFLAGS += -std=c++11 -Wall -Werror -fPIC -O2 -g -Iinclude
-LDFLAGS += -fPIC
+_CXXFLAGS := \
+	-std=c++11 -Wall -Werror -fPIC -O2 -g \
+	$(CXXFLAGS) \
+	$(addprefix -I,$(INCLUDES)) \
+	-Iinclude
+
+_LDFLAGS := \
+	-fPIC \
+	$(LDFLAGS) \
+	$(addprefix -l,$(LIBS)) \
 
 TEST-CXXFLAGS += -std=c++11 -Wall -Werror -Iinclude
 TEST-LDFLAGS += -l:$(LIB).so -lboost_unit_test_framework
@@ -18,18 +26,18 @@ _MODULES := $(SOURCES:%.cpp=$(_TMP_FILES)/%.o)
 _DEPS_MK := $(_TMP_FILES)/deps.mk
 
 $(LIB).so: $(_MODULES)
-	$(CXX) $(LDFLAGS) -shared $^ -o $@
+	$(CXX) $(_LDFLAGS) -shared $^ -o $@
 
 $(LIB).a: $(_MODULES)
 	ar rvs $@ $^
 
 ## Everything should be rebuilt upon Makefile change
 $(_TMP_FILES)/%.o: %.cpp Makefile $(_TMP_FILES)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(_CXXFLAGS) -c $< -o $@
 
 $(_DEPS_MK): $(SOURCES) $(_TMP_FILES)
 	#FIXME: this works improperly for interface files put into include/ folder
-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > $@
+	$(CXX) -MM $(_CXXFLAGS) $(SOURCES) > $@
 
 ifneq ($(SOURCES),)
 include $(_DEPS_MK)
