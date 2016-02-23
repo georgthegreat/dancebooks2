@@ -29,7 +29,7 @@ $(_TMP_FILES)/%.o: %.cpp Makefile $(_TMP_FILES)
 
 $(_DEPS_MK): $(SOURCES) $(_TMP_FILES)
 	#FIXME: this works improperly for interface files put into include/ folder
-	$(CXX) -MM $(SOURCES) > $@
+	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > $@
 
 ifneq ($(SOURCES),)
 include $(_DEPS_MK)
