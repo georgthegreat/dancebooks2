@@ -26,7 +26,7 @@ _MODULES := $(SOURCES:%.cpp=$(_TMP_FILES)/%.o)
 _DEPS_MK := $(_TMP_FILES)/deps.mk
 
 $(LIB).so: $(_MODULES)
-	$(CXX) $(_LDFLAGS) -shared $^ -o $@
+	$(CXX) -shared $^ -o $@ $(_LDFLAGS)
 
 $(LIB).a: $(_MODULES)
 	ar rvs $@ $^
