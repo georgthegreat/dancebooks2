@@ -33,7 +33,7 @@ public:
 		std::unique_ptr<Impl> impl_; \
 		\
 		friend class hda::common::PimplFactory<classname>; \
-		classname(std::unique_ptr<Impl> impl); \
+		classname(std::unique_ptr<Impl> impl) noexcept; \
 
 #define DECLARE_MOVABLE_PIMPL(classname) \
 	DECLARE_PIMPL(classname) \
@@ -45,7 +45,7 @@ public:
 
 #define DEFINE_PIMPL(classname) \
 	classname::~classname() = default; \
-	classname::classname(std::unique_ptr<Impl> impl) : \
+	classname::classname(std::unique_ptr<Impl> impl) noexcept : \
 		impl_(std::move(impl)) \
 	{ \
 	} \
