@@ -1,5 +1,5 @@
 FILES := \
-	/usr/share/hda/bild/bild.mk \
+	/usr/share/hda/bild/*.mk \
 
 include bild.mk
 
