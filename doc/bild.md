@@ -14,14 +14,26 @@ Define the following methods variables:
 
 * `LIB` — basename for the library to be built (both shared object and static library will be built)
 * `SOURCES` — list of C++ files to be compiled
-* **(optional)** `CXX` — compiler to be used for compilation (default: `g++`). Compiler should properly support `g++` options (i. e. it's OK to use some backported `g++` version or `clang`, but it's not OK to use Visual Studio CL)
+* **(optional)** `CXX` — compiler to be used for compilation (default: `g++`). Compiler should properly support `g++` options
+* **(optional)** `CXXFLAGS` — additional flags to be passed to compiler. Some rational defaults will be applied.
+* **(optional)** `INCLUDES` — additional folders with header files (local `include/` subfolder will be added by default)
+* **(optional)** `LDFLAGS` — additional flags to be passed to linker.
+* **(optional)** `LIBS` — names of libraries to be linked against
 
 ## Testing your newly compiled library
 
-* `TESTS` — list of test modules to be executed. `bild` assumes that each test module will be compiled independently (i. e. it should define `main` function)
+* `TESTS` — list of test modules (`.cpp` files) to be executed. `bild` assumes that each test module will be compiled independently (i. e. it should define `main` function)
 * Each test module will be linked against `libboost-unit-test-framework`
 * Each test module will be linked against newly compiled library and executed with proper `LD_LIBRARY_PATH` set
 * Tests can be executed explicilty by running `test` make target
+
+Following additional variables are supported (their meaning is the same as described above) 
+
+* **(optional)** `TEST-CXX`
+* **(optional)** `TEST-CXXFLAGS`
+* **(optional)** `TEST-INCLUDES`
+* **(optional)** `TEST-LDFLAGS`
+* **(optional)** `TEST-LIBS`
 
 ## Installing and uninstalling
 
