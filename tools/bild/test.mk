@@ -8,6 +8,8 @@ _TEST-CXXFLAGS := \
 
 _TEST-LDFLAGS := \
 	$(TEST-LDFLAGS) \
+	-pthread \
+	-L. \
 	-l:$(LIB).so \
 	-lboost_unit_test_framework \
 	$(addprefix -l,$(TEST-LIBS)) \

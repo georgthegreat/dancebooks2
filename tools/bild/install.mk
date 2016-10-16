@@ -13,7 +13,7 @@ install:
 		DST_PATH="$$DST_PATH"; \
 		\
 		mkdir -p "$$DST_DIRNAME"; \
-		cp -r "$$SRC_PATH" "$$DST_DIRNAME"; \
+		cp -r $$SRC_PATH "$$DST_DIRNAME"; \
 	done \
 
 

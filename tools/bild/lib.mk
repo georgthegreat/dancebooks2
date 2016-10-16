@@ -10,6 +10,7 @@ _CXXFLAGS := \
 
 _LDFLAGS := \
 	-fPIC \
+	-pthread \
 	$(LDFLAGS) \
 	$(addprefix -l,$(LIBS)) \
 

@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cstddef>
 #include <future>
+#include <iostream>
 #include <thread>
 
 namespace hda {
@@ -63,9 +64,7 @@ BOOST_AUTO_TEST_CASE(test_concurrect_connection)
 	};
 
 	auto start = std::chrono::steady_clock::now();
-	//TODO: replace with std::async
-	std::thread t(blocker);
-	t.detach();
+	std::async(std::launch::async, blocker);
 	//waiting for blocker to get the connection
 	std::this_thread::sleep_for(milliseconds(100));
 	auto conn = pool.getConnection();

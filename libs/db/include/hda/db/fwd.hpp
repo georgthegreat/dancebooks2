@@ -1,6 +1,7 @@
 #pragma once
 
-#include <pqxx>
+#include <pqxx/connection>
+#include <pqxx/transaction>
 
 #include <memory>
 

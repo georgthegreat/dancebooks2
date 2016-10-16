@@ -1,6 +1,4 @@
 LIB := libhda-db
-INCLUDES := \
-	/usr/include/pqxx \
 
 SOURCES := \
 	connection.cpp \
@@ -13,9 +11,6 @@ LIBS := \
 
 TESTS := \
 	tests/test_connection_pool.cpp \
-
-TEST-CXXFLAGS := \
-	-I/usr/include/pqxx \
 
 TEST-LDFLAGS += \
 	-lpqxx
