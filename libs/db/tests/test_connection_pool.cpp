@@ -3,6 +3,8 @@
 #include <hda/db/connection.hpp>
 #include <hda/db/transaction.hpp>
 
+#include "config.h"
+
 #define BOOST_TEST_DYN_LINK
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -26,11 +28,11 @@ namespace {
 Pool makePool()
 {
 	auto settings = Settings()
-		.setHost("localhost")
-		.setPort(5432)
-		.setUser("hda_tester")
-		.setPassword("test_password")
-		.setDatabaseName("dancebooks_tests")
+		.setHost(DB_SERVER_HOST)
+		.setPort(DB_SERVER_PORT)
+		.setUser(DB_SERVER_USER)
+		.setPassword(DB_SERVER_PASSWORD)
+		.setDatabaseName(DB_SERVER_DATABASE)
 	;
 	const size_t MAX_SIZE = 1;
 	return Pool(settings, MAX_SIZE);
