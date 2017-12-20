@@ -24,7 +24,6 @@ using std::chrono::seconds;
 using std::chrono::duration_cast;
 
 namespace {
-
 Pool makePool()
 {
 	auto settings = Settings()
@@ -42,6 +41,9 @@ Pool makePool()
 
 BOOST_AUTO_TEST_CASE(test_connection_pool)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	BOOST_CHECK_EQUAL(pool.currentSize(), 0);
 	BOOST_CHECK_EQUAL(pool.freeConnectionsSize(), 0);
@@ -58,6 +60,9 @@ BOOST_AUTO_TEST_CASE(test_connection_pool)
 
 BOOST_AUTO_TEST_CASE(test_concurrect_connection)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	auto blocker = [&]()
 	{
@@ -85,6 +90,9 @@ BOOST_AUTO_TEST_CASE(test_concurrect_connection)
 
 BOOST_AUTO_TEST_CASE(test_transaction)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	{
 		auto txn = pool.getConnection().makeReadOnlyTransaction();

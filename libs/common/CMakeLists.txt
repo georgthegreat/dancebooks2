@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.5)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../tools/CMakeModules")
+include(DanceBooksCommon)
 
-set( COMMON_SOURCES
+set(COMMON_SOURCES
     exception.cpp
+)
+set(COMMON_HEADERS
     ./include/hda/common/exception.hpp
     ./include/hda/common/pimpl_utils.hpp
 )
 
-add_library(dancebooks-common SHARED ${COMMON_SOURCES})
+add_library(dancebooks-common STATIC ${COMMON_SOURCES} ${COMMON_HEADERS})
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-
-file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "tests/*.cpp")
-db_add_tests("${TEST_SOURCES}" dancebooks-common)
+db_add_test_dir( dancebooks-common "./tests" "")

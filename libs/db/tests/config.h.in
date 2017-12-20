@@ -1,3 +1,4 @@
+#cmakedefine HAVE_DB_SERVER @HAVE_DB_SERVER@
 #cmakedefine DB_SERVER_HOST "@DB_SERVER_HOST@"
 #cmakedefine DB_SERVER_PORT @DB_SERVER_PORT@
 #cmakedefine DB_SERVER_USER "@DB_SERVER_USER@"
