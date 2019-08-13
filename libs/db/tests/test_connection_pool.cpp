@@ -3,6 +3,8 @@
 #include <hda/db/connection.hpp>
 #include <hda/db/transaction.hpp>
 
+#include "config.h"
+
 #define BOOST_TEST_DYN_LINK
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -22,15 +24,14 @@ using std::chrono::seconds;
 using std::chrono::duration_cast;
 
 namespace {
-
 Pool makePool()
 {
 	auto settings = Settings()
-		.setHost("localhost")
-		.setPort(5432)
-		.setUser("hda_tester")
-		.setPassword("test_password")
-		.setDatabaseName("dancebooks_tests")
+		.setHost(DB_SERVER_HOST)
+		.setPort(DB_SERVER_PORT)
+		.setUser(DB_SERVER_USER)
+		.setPassword(DB_SERVER_PASSWORD)
+		.setDatabaseName(DB_SERVER_DATABASE)
 	;
 	const size_t MAX_SIZE = 1;
 	return Pool(settings, MAX_SIZE);
@@ -40,6 +41,9 @@ Pool makePool()
 
 BOOST_AUTO_TEST_CASE(test_connection_pool)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	BOOST_CHECK_EQUAL(pool.currentSize(), 0);
 	BOOST_CHECK_EQUAL(pool.freeConnectionsSize(), 0);
@@ -56,6 +60,9 @@ BOOST_AUTO_TEST_CASE(test_connection_pool)
 
 BOOST_AUTO_TEST_CASE(test_concurrect_connection)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	auto blocker = [&]()
 	{
@@ -83,6 +90,9 @@ BOOST_AUTO_TEST_CASE(test_concurrect_connection)
 
 BOOST_AUTO_TEST_CASE(test_transaction)
 {
+	#ifndef HAVE_DB_SERVER
+		return;
+	#endif
 	auto pool = makePool();
 	{
 		auto txn = pool.getConnection().makeReadOnlyTransaction();
